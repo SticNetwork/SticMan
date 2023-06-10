@@ -1,0 +1,2 @@
+# SticMan
+https://stic.network
