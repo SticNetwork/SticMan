@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stick Man</title>
+</head>
+<script src="assets/js/vue.js"></script>
+<!-- element js -->
+<script src="assets/js/index.js"></script>
+<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/css/aos.css">
+<link rel="stylesheet" href="assets/css/all.min.css">
+<link rel="stylesheet" href="assets/css/lightcase.css">
+<link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<!-- element css -->
+<link rel="stylesheet" href="assets/css/index.css">
+<link rel="stylesheet" href="assets/css/newindex.css">
+<body>
+    <div id="app">
+        <div class="preloader">
+            <img src="images/preloader.png" alt="Apes land">
+        </div>
+        <header class="header-section">
+            <div class="header-bottom" style="padding:18px 0px !important;">
+                <div class="container">
+                    <div class="header-wrapper">
+                        <div class="logo">
+                            <a href="index.html" style="float: left;">
+                                <img style="width:160px;" src="images/1.png" alt="logo">
+                            </a>
+                        </div>
+                        <div>
+                            <ul class="menu">
+                                <li><a href="#home">HOME</a></li>
+                                <li><a href="#about">ABOUT</a></li>
+                                <li><a href="#mint">HOW TO MINT</a></li>
+                                <li><a href="#roadmap">ROADMAP</a></li>
+                                <li><a href="https://docs.stick.finance">WhitePaper</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="lianjie" @click="connectWallet()">{{account ? hiddenAddress(account) : 'Connect Wallet'}}</div>
+                        <div class="header-bar d-lg-none">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- end languge -->
+        <div style="width: 100%;height: 1px;"></div>
+        <section class="about padding-top teltop" id="home" style="padding-bottom: 20px;">
+            <div class="container containeryzm" style="position: relative;">
+                <div style="position: relative;">
+                    <img class="huocai" src="images/9.png">
+                    <div class="xiaologo">
+                        <a href="https://twitter.com/StickFinance"><img src="images/5.png"></a>
+                        <a href="https://t.me/Stick2023"><img src="images/6.png"></a>
+                        <a href="https://www.youtube.com/@StickFinance"><img src="images/7.png"></a>
+                        <a href="https://medium.com/@stickfinance"><img src="images/8.png"></a>
+                    </div>
+                </div>
+                <div class="about__wrapper about__wrapperhuocai">
+                    <div class="row g-5" style="margin:0 auto;color: #000;">
+                        <div class="col-lg-12 pccont" data-aos="fade-up" data-aos-duration="2000">
+                            <div class="about__content">
+                                <p class="cont510_title">Phase 1 : Mint Free $STIC Now!</p>
+                                <p class="cont510_p" style="margin-top: 10px;">A total of
+                                    100,000,000,000,000(30%total
+                                    supply) $STIC tokens are nowavailable to be mint.Each person mints 10 $STIC per second, and invites a friend to increase the mining rate by 10 STIC/S, with no upper limit. For example: you invite 10 friends, your mining rate is 110STIC/S.</p>
+
+                                <div class="cont1">
+                                   
+                                    <!-- <div class="fl" :style="'width: '+process+'%;'">Minted</div> -->
+                                    <div class="fl"><img class="zhongjianxiaoren" src="images/13.png">
+                                    </div>
+                                   
+                                </div>
+                               
+                                <div class="cont2"><img class="xia" src="images/11.png" :style="'width: '+process+'%;'"><img
+                                        class="shang" src="images/12.png"></div>
+                                <div class="btn-group bottomyzm justify-content-center">
+                                    <a v-loading="loading.startMint" @click="startMint()" class="default-btn default-btn--secondary" :class="person.initial ? 'disabled':''"><span>
+                                    {{person.initial ? '$STIC Mining':'Start Mint'}}
+                                    </span></a>
+                                    <a v-loading="loading.withdrawal" @click="withdrawal()" class="default-btn default-btn--secondary" :class="person.initial ? '':'disabled'"> <span>Claim</span></a>
+                                    <a href="#ido" class="default-btn default-btn--secondary disabled"> <span>Pre-Sale</span></a>
+                                </div>
+                                <div class="btn-group sangediv justify-content-center">
+                                    <div class="fl">
+                                        <p class="toufont">{{person.reward}}</p>
+                                        <p class="twofont">Unclaimed</p>
+                                    </div>
+                                    <div class="fl" style="margin-left: 5%;">
+                                        <p class="toufont">{{power}}</p>
+                                        <p class="twofont">STIC/S</p>
+                                    </div>
+                                    <div class="fr">
+                                        <p class="toufont">{{person.inviteCount}}</p>
+                                        <p class="twofont">Invited</p>
+                                    </div>
+                                </div>
+                                <div style="clear: both;"></div>
+                                <p class="cont510_title" style="margin-top: 15px;">Invited Friends</p>
+                                <div class="kaobei">
+                                    <img src="images/14.png">
+                                    <span class="wenzi520"><b>Invitation Links:</b> {{showInvitation()}}</span>
+                                    <span class="copy520" @click="onCopy">copy</span>
+                                </div>
+                                <div class="zhongjiang">
+                                    <div v-for="(item) in inviters" class="zjdiv">
+                                        <div>{{parseTime(item.datetime)}}</div>
+                                        <div>{{hiddenAddress(item.address)}}</div>
+                                        <div>Success</div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <img src="images/42.png" class="xian" style="margin-top: 20px;">
+        <section class="about padding-top" id="about" style="padding-bottom: 20px;">
+            <div class="container containeryzm" style="margin-top: 10px;">
+                <div class="about__wrapper">
+                    
+                    <div class="row g-5">
+                        <div class="col-lg-6">
+                            <div class="about__thumb" data-aos="fade-right" data-aos-duration="1500">
+                                <img src="images/17.png" alt="About Image">
+                            </div>
+                        </div>
+                        <div class="col-lg-6" data-aos="fade-left" data-aos-duration="2000">
+                            <div class="about__content fr about__contentyzm">
+                                <div class="gongao1">
+                                    <p class="biaoti">ABOUT $STIC</p>
+                                    <p class="neirong">$STIC aims to become a community building crypto asset that
+                                        connects like
+                                        minded people together. If you are a seasoned miner or simply Crypto curious,
+                                        $STIC has the lowest barrier to entry through its unique tokenomics.</p>
+                                    <p class="neirong">The total amount of $STIC is 300 trillion, 100 trillion $STIC is
+                                        obtained through mining, and the remaining 200 trillion $STIC is used for IDO,
+                                        market liquidity,$STIC Mining, etc.The team holds 30 trillion.</p>
+                                    <p class="neirong"><b>BSC Contract Address : {{tokenContract}}</b></p>
+                                </div>
+                            </div>
+                            <div style="clear: both;"></div>
+                            <div class="anniuguizhe fr">
+                                <ul>
+                                    <li><a href="https://twitter.com/StickFinance"><img src="images/18.png" alt=""></a></li>
+                                    <li><a href="https://t.me/Stick2023"><img src="images/19.png" alt=""></a></li>
+                                    <li><a href="https://www.youtube.com/@StickFinance"><img src="images/20.png" alt=""></a></li>
+                                    <li><a href="https://medium.com/@stickfinance"><img src="images/21.png" alt=""></a></li>
+                                    <li><a href="https://bscscan.com/token/0x0694ad25e6c67da10f7b07ad527fe8edf2ba23ae"><img src="images/23.png" alt=""></a></li>
+                                    <li><img src="images/24.png" alt=""></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="about padding-top" id="" style="padding-bottom: 20px;">
+            <div class="container containeryzmpblic">
+                <div class="about__wrapper">
+                    <div class="row g-5">
+                        <div class="cont510_title1">Join the Community!</div>
+                        <div class="col-lg-6" style="margin-top: 30px;">
+                            <div class="gongaonity" data-aos="fade-up" data-aos-duration="1500">
+                                <div class="nityzuo">
+                                    <div style="width: 100%;height: 35px;">
+                                        <p class="fl wenzi" style="margin-bottom: 0px;">Stick Man</p>
+                                        <div class="shezhiyzm fr"><span>Twitter</span><img src="images/25.png">
+                                        </div>
+                                    </div>
+                                    <p class="aite">@StickFinance</p>
+                                    <div class="floowzuo">
+                                        <div class="floowzuoone">
+                                            <p>$STIC has no initial coin supply. Supply is generated by all people that ...</p>
+                                            <p><span style="margin-right: 10px;"></span> </p>
+                                            <p class="fudongfllow" style="color: #fff;"><a href="https://twitter.com/StickFinance">FOLLOW</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img src="images/26.png" class="feige">
+                            </div>
+                        </div>
+                        <div class="col-lg-6" style="margin-top: 30px;">
+                            <div class="gongaonity" data-aos="fade-up" data-aos-duration="1500">
+                                <div class="nityzuo">
+                                    <div style="width: 100%;height: 35px;">
+                                        <p class="fl wenzi" style="margin-bottom: 0px;">Stick Man</p>
+                                        <div class="shezhiyzm fr"><span>Telegram</span><img src="images/25.png">
+                                        </div>
+                                    </div>
+                                    <p class="aite">https://t.me/Stick2023</p>
+                                    <div class="floowzuo">
+                                        <div class="floowzuoone">
+                                            <p>A new virtual mining is about to start. $STIC is a virtual machine, and everyone only needs to ... </p>
+                                            <p><span style="margin-right: 10px;"></span> </p>
+                                            <p class="fudongfllow" style="color: #fff;"><a href="https://t.me/Stick2023">FOLLOW</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img src="images/27.png" class="feige">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- xian -->
+        <img class="xian" src="images/28.png" style="margin-top: 20px;">
+        <section class="about padding-top" style="padding-bottom: 20px;" id="mint">
+            <div class="container containeryzmpblic">
+                <div class="about__wrapper" data-aos="fade-up" data-aos-duration="1500">
+                    <div class="cont510_title1">HOW TO MINT</div>
+                    <div class="row marsgong" style="width:100%;margin:0 auto;margin-top: 30px;">
+                        <div class="col-lg-2" style="margin-top: 0px;text-align: center;">
+                            <img src="images/29.png" class="qwtyzm">
+                        </div>
+                        <div class="col-lg-10" style="margin-top: 0px;">
+                            <div class="marsyzm col-lg-10" style="width: 100%;">
+                                <div class="marsyzmyou">
+                                    <span class="cont510_title2">Create a Wallet</span>
+                                    <div class="marsp">
+                                        <p class="textright">Download Metamask or your wallet of choice from the app
+                                            store or google
+                                            play store for free. For desktop users, download the google chrome extension
+                                            by going to metamask.io.</p>
+                                    </div>
+                                    <div style="clear: both;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row marsgong" style="width:100%;margin:0 auto;margin-top: 30px;">
+                        <div class="col-lg-2" style="margin-top: 0px;text-align: center;">
+                            <img src="images/30.png" class="qwtyzm">
+                        </div>
+                        <div class="col-lg-10" style="margin-top: 0px;">
+                            <div class="marsyzm col-lg-10" style="width: 100%;">
+                                <div class="marsyzmyou">
+                                    <span class="cont510_title2">Go to Stick.finance</span>
+                                    <div class="marsp">
+                                        <p class="textright">Connect to Stick.finance.Go to Stick. finance in google
+                                            chrome or on the browser inside your Metamask app. Connect your wallet.
+                                        </p>
+                                    </div>
+                                    <div style="clear: both;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row marsgong" style="width:100%;margin:0 auto;margin-top: 30px;">
+                        <div class="col-lg-2" style="margin-top: 0px;text-align: center;">
+                            <img src="images/31.png" class="qwtyzm">
+                        </div>
+                        <div class="col-lg-10" style="margin-top: 0px;">
+                            <div class="marsyzm col-lg-10" style="width: 100%;">
+                                <div class="marsyzmyou">
+                                    <span class="cont510_title2">Click Start Mint</span>
+                                    <div class="marsp">
+                                        <p class="textright">Can mint 10 $STIC per second, invite friends to join mining,
+                                            can get more mining rewards.</p>
+                                    </div>
+                                    <div style="clear: both;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- xian -->
+        <img class="xian" src="images/32.png" style="margin-top: 20px;">
+        <section class="counter counter--uplifted" id="roadmap">
+            <div class="container containeryzmpblic" style="margin-bottom: 40px;margin-top: 40px;">
+                <div class="counter__wrapper" data-aos="fade-up" data-aos-duration="1500">
+                    <div class="row g-1">
+                        <div class="cont510_title1" style="margin-top: -10%;">Stick Man RoadMap</div>
+                        <div class="counter__item count_yzm520">
+                            <p class="cont_yzm_pp">Phase 1: Mining and Free Mint</p>
+                            <p class="cont_yzm_pp">Phase 2: IDO and PancakeSwap</p>
+                            <p class="cont_yzm_pp">Phase 3: Exchange Listings</p>
+                        </div>
+                        <p class="baiotidibu">The path is never promised but it gets clearer with each step.</p>
+                        <div class="col-lg-4 col-sm-6 guide01div">
+                            <div class="counter__item count_yzm">
+                                <p class="cont_yzm_p">Phase 1</p>
+                                <p class="cont_yzm_pp mtop">·Launch</p>
+                                <p class="cont_yzm_pp mtop">·1,000+ Holders</p>
+                                <p class="cont_yzm_pp mtop">·Mining and Free Mint
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="counter__item count_yzm">
+                                <p class="cont_yzm_p">Phase 2</p>
+                                <p class="cont_yzm_pp mtop">·Start $STIC IDO</p>
+                                <p class="cont_yzm_pp mtop">·Exchange On PancakeSwap</p>
+                                <p class="cont_yzm_pp mtop">·10,000+ Holders</p>
+                                <p class="cont_yzm_pp mtop">CoinGecko/Coinmarketcap Listings
+                                </p>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="counter__item count_yzm">
+                                <p class="cont_yzm_p">Phase 3</p>
+                                <p class="cont_yzm_pp mtop">·Exchange Listings</p>
+                                <p class="cont_yzm_pp mtop">·100,000+ Holders</p>
+                                <p class="cont_yzm_pp mtop">·T1 Exchange Listings</p>
+                                <p class="cont_yzm_pp mtop">·MEXC/Kucoin/Huobi/Bybit/OKEX/Binance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="footer" style="background:#000;position: relative">
+            <img src="images/41.png" alt="" style="position: absolute;right: 0;top:-46px;width: 40px;">
+            <div class="footer__wrapper" style="">
+                <div class="container conmecont">
+                    <div class="">
+                        <img src="images/33.png" class="logoqisi fl" style="width: 150px;" alt="logo">
+                        <div class="header-btn fl header-btnyzm">
+                            <ul>
+                                <li><a href="https://twitter.com/StickFinance"><img src="images/34.png" alt=""></a></li>
+                                <li><a href="https://t.me/Stick2023"><img src="images/35.png" alt=""></a></li>
+                                <li><a href="https://www.youtube.com/@StickFinance"><img src="images/36.png" alt=""></a></li>
+                                <li><a href="https://medium.com/@stickfinance"><img src="images/37.png" alt=""></a></li>
+                                <li><a href="https://bscscan.com/token/0x0694ad25e6c67da10f7b07ad527fe8edf2ba23ae"><img src="images/39.png" alt=""></a></li>
+                                <li><img src="images/40.png" alt=""></li>
+                            </ul>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <el-dialog :show-close="false" :visible.sync="dialogVisible" width="45%">
+            <!-- <div class="okx">OKX</div> -->
+            <div class="okx" style="margin-top: 20px;">Wallet Connect</div>
+            <div class="okx close524" @click="dialogVisible=false" style="margin-top: 20px;">Close</div>
+        </el-dialog>
+    </div>
+</body>
+<script src="assets/js/web3.min.js"></script>
+<script src="assets/js/tools.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                dialogVisible:false,
+                hiddenAddress,parseTime,
+                input1: '0.1',
+                rate: 100000000000,
+                loading: {
+                    exchange: false,
+                    startMint: false,
+                    withdrawal: false
+                },
+                web3: null,
+                networkId: null,
+                timer: null, 
+                account: null,
+                tokenContract: "0x0694ad25e6c67da10f7b07ad527fe8edf2ba23ae",
+                exchangeContract: "0x8e747faefbe2ead42bc94ecbd79ecaf0b6e7ff89",
+                mintContract: "0x974fd266ba28e686864213dc124198c1474a230d",
+                multicallAddress: '0xff6fd90a470aaa0c1b8a54681746b07acdfedc9b', 
+                ethBalance: "0",
+                tokenBalance: "0",
+                hostName: '', 
+                person:{
+                    initial: false,
+                    inviteCount: 0,
+                    rate: 10,
+                    totalClaim: 0,
+                    reward: 0,
+                },
+                mintTotal: 100000000000000,
+                inviters: [],
+                getrefer: '',
+                
+            }
+        },
+       
+        computed:{
+          process(){
+            return parseFloat(this.person.totalClaim / this.mintTotal).toFixed(2);
+          },
+          power(){
+            return this.person.rate * this.person.inviteCount + this.person.rate;
+          }
+        },
+        created() {
+            this.initialData();
+            this.hostName = window.location.protocol + '//' + window.location.hostname;
+        },
+        methods: {
+            async startMint(){
+                if(this.loading.startMint){return;}
+                if(this.person.initial){return;}
+                if(!this.web3){
+                    this.$message({message: 'Please connect Web3 MetaMask/Trust/TokenPocket/OKX/ Wallet',type: 'error'});
+                    return;
+                }
+                try{
+                    this.loading.startMint = true;
+                    const searchParams = new URLSearchParams(window.location.search);
+                    const paramValue = searchParams.get('refer');
+                    const refer = paramValue ? paramValue : "0x0000000000000000000000000000000000000000";
+                    let myContract = new this.web3.eth.Contract(contractAbi, this.mintContract);
+                    let receipt = await myContract.methods.startMint(refer).send({
+                      from: this.account,
+                      gasLimit:251705,
+                    });
+                    if(receipt){
+                        this.$message({message: 'successfully',type: 'success'});
+                        this.getPing();
+                    }
+                }catch(e){
+                    this.$message({message: e.message,type: 'error'});
+                }finally{
+                    this.loading.startMint = false;
+                }
+
+            },
+            async withdrawal(){
+                if(this.loading.withdrawal){return;}
+                if(!this.person.initial){return;}
+                if(!this.web3){
+                    this.$message({message: 'Please connect Web3 MetaMask/Trust/TokenPocket/OKX/ Wallet',type: 'error'});
+                    return;
+                }
+                try{
+                    this.loading.withdrawal = true;
+                    let myContract = new this.web3.eth.Contract(contractAbi, this.mintContract);
+                    let receipt = await myContract.methods.withdraw().send({
+                      from: this.account,
+                      gasLimit:183931,
+                    });
+                    if(receipt){
+                        this.$message({message: 'successfully',type: 'success'});
+                        this.getPing();
+                    }
+                }catch(e){
+                    this.$message({message: e.message,type: 'error'});
+                }finally{
+                    this.loading.withdrawal = false;
+                }
+            },
+            showInvitation(){
+                if(this.account){
+                    return this.hostName + '/?refer=' + hiddenAddress(this.account);
+                    
+                }
+                return this.hostName;
+            },
+            getrefercode(){
+                const searchParams = new URLSearchParams(window.location.search);
+                const paramValue = searchParams.get('refer');
+                const refer = paramValue ? paramValue : "0x0000000000000000000000000000000000000000";
+                return this.getrefer = refer;
+                return this.getrefer;
+            },
+            async exchange(){
+                if(!this.web3){
+                    this.$message({message: 'Please connect Web3 MetaMask/Trust/TokenPocket/OKX/ Wallet',type: 'error'});
+                    return;
+                }
+                if(parseFloat(this.input1) < 0.1){
+                    this.$message({message: 'The minimum cannot be lower than 0.1 BNB.',type: 'error'});
+                    return;
+                }
+
+
+                if(this.loading.exchange){return;}
+                try{
+                    this.loading.exchange = true;
+                    let myContract = new this.web3.eth.Contract(contractAbi, this.exchangeContract);
+                    const value = this.input1 * 1e18;
+                    let receipt = await myContract.methods.presale().send({
+                      from: this.account,
+                      value: value,
+                      gasLimit:120000,
+                    });
+                    this.getTokenBlance();
+                    this.getEthBlance();
+                }catch(e){
+                    this.$message({message: e.message,type: 'error'});
+                }finally{
+                    this.loading.exchange = false;
+                }
+                
+
+            },
+            async getPing(){
+                console.log('timed task');
+                if(this.web3){
+
+                    if(this.networkId !== 56){
+                        await this.switchNetwork();
+                    }
+                    this.getEthBlance();
+                    this.getTokenBlance();
+                    this.getPersion();
+                    this.getRewards();
+                }
+            },
+            async getPersion(){
+                let tokenCont = new this.web3.eth.Contract(contractAbi, this.mintContract);
+                const amount = await tokenCont.methods._currentAmount().call();
+                this.person.totalClaim = parseInt(this.web3.utils.fromWei(amount, 'ether'));
+                const user = await tokenCont.methods._users(this.account).call();
+                this.person.initial = user.initial;
+                this.person.inviteCount = user.inviteCount;
+             
+                const inviteCount = user.inviteCount < 100 ? user.inviteCount : 100;
+                const inviterCalls = [];
+                if(inviteCount > 0){
+                    for (let i = 0; i < inviteCount; i++) {
+                        const callData = this.web3.eth.abi.encodeFunctionCall({
+                            name: '_invites',
+                            type: "function",
+                            "inputs": [
+                              {
+                                "name": "",
+                                "type": "address"
+                              },
+                              {
+                                "name": "",
+                                "type": "uint256"
+                              }
+                            ]
+                        },[this.account,i]);
+                        inviterCalls.push({target: this.mintContract, callData});
+                    }
+                    const multicall = new this.web3.eth.Contract(contractAbi, this.multicallAddress);
+                    console.log(inviterCalls);
+                    const inviterList = await multicall.methods.tryAggregate(true,inviterCalls).call();
+                    this.inviters = [];
+                    inviterList.forEach(obj => {
+                        console.log(obj.returnData);
+                        let p  = this.web3.eth.abi.decodeParameters(['address','uint256'],obj.returnData);
+                        console.log(p);
+                        this.inviters.push({
+                            address:p[0],
+                            datetime:p[1]
+                        });
+                    });
+                }
+
+
+            },
+            async getTokenBlance(){
+                let tokenCont = new this.web3.eth.Contract(contractAbi, this.tokenContract);
+                let balance = await tokenCont.methods.balanceOf(this.account).call();
+                balance = parseFloat(this.web3.utils.fromWei(balance, 'ether')).toFixed(0);
+                this.tokenBalance = balance;
+            },
+            async getEthBlance(){
+                let weiBalance = await this.web3.eth.getBalance(this.account);
+                this.ethBalance = parseFloat(this.web3.utils.fromWei(weiBalance, 'ether')).toFixed(4);
+            },
+            async getRewards(){
+                let tokenCont = new this.web3.eth.Contract(contractAbi, this.mintContract);
+                const amount = await tokenCont.methods.getRewards(this.account).call();
+                this.person.reward = parseInt(this.web3.utils.fromWei(amount, 'ether'));
+            },
+            async initialData(){
+                
+                this.connectionWallet();
+
+                if (this.timer) {
+                  clearInterval(this.timer);
+                }
+                this.timer = setInterval(this.getPing, 30000);
+            },
+            connectWallet(){
+                if(!window.ethereum){
+                    this.$message({message: 'Please connect Web3 MetaMask/Trust/TokenPocket/OKX/ Wallet',type: 'error'});
+                    return;
+                }
+                this.connectionWallet();
+
+            },
+            async connectionWallet(){
+               
+                window.ethereum.on('accountsChanged', function(accounts) {
+                  location.reload()
+                })
+             
+                window.ethereum.on('chainChanged', function(networkId) {
+                  console.log(`networkId=${networkId}`);
+                  
+                  location.reload()
+                })
+               
+                const ethereum = window.ethereum;
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                const accountsCatch = localStorage.getItem('accountsCatch');
+                  if (accountsCatch && accountsCatch !== accounts[0]) {
+                    localStorage.clear()
+                  }
+                  localStorage.setItem('accountsCatch', accounts[0]);
+                  this.account = accounts[0];
+                  
+                  this.web3 = new Web3(ethereum);
+                  this.networkId = await this.web3.eth.net.getId();
+                  this.getPing();
+            },
+            async switchNetwork(){
+              
+                const data = {
+                chainId: 56,
+                chainName: "BSC MainNet",
+                name: "BNB",
+                symbol: "BNB",
+                decimals: 18,
+                rpcUrls: ["https://bsc-dataseed1.defibit.io"],
+                blockExplorerUrls: ["https://bscscan.com/"],
+                };
+                await changeChainNetwork(data);
+                location.reload();
+            },
+            onCopy() {
+                let inputDom = document.createElement('input');  
+                inputDom.setAttribute('readonly', 'readonly'); 
+                inputDom.value = this.account ? this.hostName + '/?refer=' + this.account : this.hostName;
+                document.body.appendChild(inputDom); 
+                inputDom.select(); 
+                document.execCommand('Copy'); 
+                inputDom.style.display = 'none';
+                inputDom.remove(); 
+                this.$message({
+                    message: 'copy success',
+                    type: 'success'
+                });
+
+            }
+        }
+    })
+</script>
+<script src="assets/js/jquery-3.6.0.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/all.min.js"></script>
+<script src="assets/js/swiper-bundle.min.js"></script>
+<script src="assets/js/aos.js"></script>
+<script src="assets/js/countdown.min.js"></script>
+<script src="assets/js/lightcase.js"></script>
+<script src="assets/js/purecounter_vanilla.js"></script>
+<script src="assets/js/custom.js"></script>
+</html>
